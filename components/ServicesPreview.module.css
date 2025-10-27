@@ -1,0 +1,54 @@
+.services {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.services h2 {
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background: var(--white); /* Use variable */
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card h3 {
+  font-size: 1.5rem;
+  color: var(--primary-color); /* Use variable */
+  margin-bottom: 1rem;
+}
+
+.card p {
+  line-height: 1.6;
+  color: var(--text-color-dark); /* Use variable */
+  margin-bottom: 1.5rem;
+}
+
+.arrow {
+  font-size: 1.5rem;
+  color: var(--primary-color); /* Use variable */
+  text-decoration: none;
+}

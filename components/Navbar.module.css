@@ -1,0 +1,65 @@
+/* components/Navbar.module.css */
+.navbar {
+  display: flex;
+  justify-content: space-between; /* Pushes logo left, links center, button right */
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: var(--white);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: var(--dark-background);
+  flex-shrink: 0; /* Prevent logo from shrinking */
+}
+
+/* Container for the main nav links */
+.navLinks {
+  display: flex;
+  list-style: none;
+  gap: 1.5rem;
+  /* Centering: These links will naturally center if space allows */
+  /* If they don't center perfectly, uncomment the next two lines */
+  /* margin-left: auto; */
+  /* margin-right: auto; */
+}
+
+.navLinks a {
+  text-decoration: none;
+  color: var(--text-color-dark);
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.navLinks a:hover {
+  color: var(--primary-color);
+}
+
+/* Style for the new Orders button */
+.ordersButton {
+  padding: 0.6rem 1.2rem;
+  background-color: var(--primary-color); /* Red background */
+  color: var(--white); /* White text */
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  flex-shrink: 0; /* Prevent button from shrinking */
+}
+
+.ordersButton:hover {
+  background-color: var(--primary-hover); /* Darker red on hover */
+}
+
+/* Responsive adjustments if needed */
+@media (max-width: 768px) {
+  .navLinks {
+    display: none; /* Hide main links on small screens, or implement a burger menu */
+  }
+  .navbar {
+    /* Adjust spacing if logo and button are too close */
+  }
+}

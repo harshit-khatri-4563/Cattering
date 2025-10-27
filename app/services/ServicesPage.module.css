@@ -1,0 +1,108 @@
+/* app/services/ServicesPage.module.css */
+.menuPage {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.pageTitle {
+  font-size: 3rem;
+  text-align: center;
+  margin-bottom: 3rem;
+  color: var(--dark-background); /* Use variable */
+}
+
+.menuLayout {
+  display: grid;
+  grid-template-columns: 280px 1fr; 
+  gap: 2.5rem;
+}
+
+/* --- LEFT COLUMN: CATEGORY NAVIGATION --- */
+.categoryNav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: sticky;
+  top: 2rem;
+}
+
+.categoryNav button {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: left;
+  background-color: var(--light-background); /* Use variable */
+  border: 1px solid #eee;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s, transform 0.2s;
+}
+
+.categoryNav button:hover {
+  background-color: #f0f0f0;
+  transform: translateX(5px);
+}
+
+.categoryNav button.active {
+  background-color: var(--primary-color); /* Use variable */
+  color: var(--white); /* Use variable */
+  font-weight: bold;
+  border-color: var(--primary-color); /* Use variable */
+}
+
+/* --- RIGHT COLUMN: ITEM DISPLAY --- */
+.itemDisplay h2 {
+  font-size: 2.2rem;
+  color: var(--dark-background); /* Use variable */
+  margin-top: 0;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 0.5rem;
+}
+
+/* --- THIS IS THE 3-COLUMN MATRIX --- */
+.itemGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 1.5rem;
+}
+
+
+/* --- RESPONSIVE STYLES --- */
+@media (max-width: 1200px) {
+  .itemGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .menuLayout {
+    grid-template-columns: 1fr; 
+  }
+
+  .categoryNav ul {
+    position: static;
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .categoryNav li {
+    flex-shrink: 0;
+  }
+
+  .categoryNav button {
+    width: auto;
+    white-space: nowrap;
+    margin-right: 0.5rem;
+  }
+  
+  .itemGrid {
+    grid-template-columns: 1fr;
+  }
+}

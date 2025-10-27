@@ -1,0 +1,61 @@
+/* components/MenuItem.module.css */
+.card {
+  background: var(--white);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: transform 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.content {
+  padding: 1.5rem;
+}
+
+.content h3 {
+  font-size: 1.25rem;
+  color: var(--text-color-dark);
+  margin-bottom: 0.5rem;
+}
+
+.content p {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+/* THIS IS THE MISSING STYLE FOR "ADD TO ORDER" */
+.addButton {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  background-color: var(--primary-color); /* The red color */
+  color: var(--white);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.addButton:hover {
+  background-color: var(--primary-hover); /* The lighter red */
+}
+
+/* THIS IS THE NEW STYLE FOR "REMOVE" */
+.removeButton {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  background-color: #7f8c8d; /* A neutral gray color */
+  color: var(--white);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.removeButton:hover {
+  background-color: #95a5a6; /* Lighter gray on hover */
+}

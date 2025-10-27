@@ -1,0 +1,26 @@
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background-color: var(--dark-background); /* Use variable */
+  color: var(--white); /* Use variable */
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .stats {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+.statItem h2 {
+  font-size: 3.5rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.statItem p {
+  font-size: 1.2rem;
+  margin: 0;
+}

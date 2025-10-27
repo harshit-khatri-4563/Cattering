@@ -1,0 +1,53 @@
+.form {
+  background: var(--light-background); /* Use variable */
+  padding: 2rem;
+  border-radius: 8px;
+}
+
+.form h3 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+}
+
+.formGroup {
+  margin-bottom: 1rem;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.formGroup input,
+.formGroup textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 1rem;
+  background-color: var(--primary-color); /* Use variable */
+  color: var(--white); /* Use variable */
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submitButton:hover {
+  background-color: var(--primary-hover); /* Use variable */
+}
+
+.status {
+  text-align: center;
+  margin-top: 1rem;
+  color: green;
+}

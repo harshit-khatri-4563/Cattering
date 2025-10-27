@@ -1,0 +1,727 @@
+/* app/admin/orders/AdminOrders.module.css */
+
+/* --- Page, Filter, Order List Styles --- */
+.adminPage {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 2rem;
+}
+.adminPage h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: var(--dark-background);
+  font-size: 2.5rem;
+}
+.filterContainer {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 1rem;
+}
+.filterContainer button {
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  background-color: var(--white);
+  color: #555;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+.filterContainer button:hover {
+  background-color: #f0f0f0;
+}
+.filterContainer button.activeFilter {
+  background-color: var(--primary-color);
+  color: var(--white);
+  border-color: var(--primary-color);
+  font-weight: bold;
+}
+.orderList {
+  list-style: none;
+  padding: 0;
+}
+.orderItem {
+  background-color: var(--white);
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  padding: 1.5rem 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1.5rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+.orderDetails {
+  flex-grow: 1;
+  min-width: 300px;
+}
+.detailsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 0.5rem 1.5rem;
+  margin-bottom: 1rem;
+}
+.detailsGrid p {
+  margin-bottom: 0.2rem;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+.detailsGrid p strong {
+  color: var(--dark-background);
+  min-width: 60px;
+  display: inline-block;
+}
+.orderDetails p {
+  margin-bottom: 0.6rem;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+.orderDetails p strong {
+  color: var(--dark-background);
+  min-width: 90px;
+  display: inline-block;
+}
+.savedDate {
+  font-size: 0.85rem;
+  color: #777;
+  margin-bottom: 1rem;
+  border-bottom: 1px dashed #eee;
+  padding-bottom: 0.5rem;
+}
+.notesDisplay {
+  background-color: #f8f9fa;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  white-space: pre-wrap;
+}
+.notesDisplay strong {
+  display: block;
+  margin-bottom: 0.3rem;
+  min-width: auto;
+  color: var(--dark-background);
+}
+.orderDetails > p:last-of-type {
+  margin-top: 1rem;
+  font-weight: bold;
+}
+.itemList {
+  display: none;
+}
+.itemCategory {
+  font-size: 0.8rem;
+  color: #888;
+  margin-left: 5px;
+}
+.orderActions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  flex-shrink: 0;
+  align-self: center;
+}
+.orderActions button {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s, transform 0.1s;
+  font-size: 0.9rem;
+  min-width: 140px;
+  text-align: center;
+  color: white;
+}
+.orderActions button:active {
+  transform: scale(0.98);
+}
+.editButton {
+  background-color: #3498db;
+}
+.editButton:hover {
+  background-color: #2980b9;
+}
+.invoiceButton {
+  background-color: #9b59b6;
+  color: white;
+}
+.invoiceButton:hover {
+  background-color: #8e44ad;
+}
+.completeButton {
+  background-color: #2ecc71;
+}
+.completeButton:hover {
+  background-color: #27ae60;
+}
+.activateButton {
+  background-color: #f39c12;
+}
+.activateButton:hover {
+  background-color: #e67e22;
+}
+.deleteButton {
+  background-color: var(--primary-color);
+}
+.deleteButton:hover {
+  background-color: var(--primary-hover);
+}
+
+/* --- Edit Form Modal Styles --- */
+.editModalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1050;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+.editModal {
+  background-color: white;
+  padding: 2rem 2.5rem;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 750px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  z-index: 1051;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.editModal h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: var(--dark-background);
+  flex-shrink: 0;
+}
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 1.5rem;
+  margin-bottom: 1rem;
+  flex-shrink: 0;
+}
+.formGroup {
+  margin-bottom: 0;
+}
+.formGroup label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #333;
+}
+.formGroup input {
+  width: 100%;
+  padding: 0.7rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+.notesGroup {
+  grid-column: 1 / -1;
+  margin-bottom: 1.5rem;
+  flex-shrink: 0;
+}
+.notesGroup textarea {
+  width: 100%;
+  padding: 0.7rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 60px;
+}
+.editItemList {
+  margin-top: 1rem;
+  border-top: 1px solid #eee;
+  padding-top: 1rem;
+  font-size: 0.9rem;
+  color: #555;
+  overflow-y: auto;
+  flex-grow: 1;
+  margin-bottom: 1.5rem;
+  min-height: 0;
+}
+.editItemList strong {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+  color: #333;
+}
+.editCategoryGroup {
+  margin-bottom: 1rem;
+}
+.editSubListHeader {
+  font-size: 0.95rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid #eee;
+}
+.editableItemList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.editableItemList li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.5rem 0.5rem 10px;
+  border-bottom: 1px solid #f0f0f0;
+}
+.editableItemList li:last-child {
+  border-bottom: none;
+}
+.editableItemList span {
+  flex-grow: 1;
+  margin-right: 1rem;
+  font-size: 0.9rem;
+}
+.removeItemButton {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  font-size: 1rem;
+  line-height: 22px;
+  text-align: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 0.2s;
+}
+.removeItemButton:hover {
+  background-color: #c0392b;
+}
+.noItems {
+  font-style: italic;
+  color: #888;
+  text-align: center;
+  margin: 1rem 0;
+}
+.note {
+  font-size: 0.85rem;
+  color: #777;
+  margin-top: 1rem;
+  text-align: center;
+  flex-shrink: 0;
+}
+.editActions {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  border-top: 1px solid #eee;
+  padding-top: 1.5rem;
+  flex-shrink: 0;
+  align-items: center;
+}
+.addItemsButton {
+  padding: 0.7rem 1.5rem;
+  background-color: #9b59b6;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-right: auto;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+.addItemsButton:hover {
+  background-color: #8e44ad;
+}
+.saveButton {
+  padding: 0.7rem 1.5rem;
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+.saveButton:hover {
+  background-color: #27ae60;
+}
+.cancelButton {
+  padding: 0.7rem 1.5rem;
+  background-color: #bdc3c7;
+  color: #333;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+.cancelButton:hover {
+  background-color: #95a5a6;
+}
+
+/* --- Invoice Modal Styles (Updated Layout) --- */
+.invoiceModalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1060;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+.invoiceModal {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 800px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  z-index: 1061;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+.closeInvoiceButton {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+  color: #aaa;
+  padding: 0.25rem;
+  z-index: 10;
+}
+.closeInvoiceButton:hover {
+  color: #555;
+}
+.invoiceModal h2 {
+  margin: 0 0 1.5rem 0;
+  text-align: center;
+  color: var(--dark-background);
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+
+.invoiceHeader {
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+  flex-shrink: 0;
+}
+.invoiceHeaderGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem 1.5rem;
+  margin-bottom: 1rem;
+}
+.invoiceHeaderGrid p {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+.invoiceHeaderGrid p strong {
+  min-width: 80px;
+  display: inline-block;
+  font-weight: bold;
+  color: #333;
+}
+.invoiceNotes {
+  background-color: #f8f9fa;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  margin-top: 0;
+  white-space: pre-wrap;
+  grid-column: 1 / -1;
+}
+.invoiceNotes strong {
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.invoiceSeparator {
+  border: none;
+  border-top: 1px dashed #ccc;
+  margin: 1.5rem 0;
+  flex-shrink: 0;
+}
+.invoiceItemList {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-right: 1rem;
+  margin-bottom: 1.5rem;
+  min-height: 0;
+}
+.invoiceItemList h3 {
+  font-size: 1.3rem;
+  color: var(--dark-background);
+  margin-bottom: 1rem;
+}
+.invoiceTypeGroup {
+  margin-bottom: 1.5rem;
+}
+.invoiceListHeader {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--dark-background);
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid #ccc;
+}
+.invoiceCategoryGroup {
+  margin-left: 10px;
+  margin-bottom: 1rem;
+}
+.invoiceCategoryGroup h5 {
+  font-size: 1rem;
+  color: var(--primary-color);
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+/* --- Comma-separated Item Display --- */
+.invoiceCategoryGroup ul {
+  display: none;
+} /* Hide the old ul */
+.invoiceItemsCommaSeparated {
+  display: block !important; /* **Ensure it's displayed** */
+  visibility: visible !important; /* **Ensure it's visible** */
+  font-size: 0.95rem;
+  padding: 4px 0 4px 15px; /* Indent */
+  line-height: 1.6; /* Allow wrapping */
+  margin: 0;
+  color: var(--text-color-dark); /* Ensure text color is set */
+}
+/* --- END Item Display --- */
+
+.invoiceActions {
+  margin-top: auto;
+  padding-top: 1.5rem;
+  border-top: 1px solid #eee;
+  flex-shrink: 0;
+  text-align: right;
+}
+.printInvoiceButton {
+  padding: 0.7rem 1.5rem;
+  background-color: #7f8c8d;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+.printInvoiceButton:hover {
+  background-color: #95a5a6;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .detailsGrid,
+  .invoiceHeaderGrid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 600px) {
+  .orderItem {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .orderActions {
+    flex-direction: row;
+    width: 100%;
+    margin-top: 1rem;
+  }
+  .orderActions button {
+    flex-grow: 1;
+  }
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+  .editModal {
+    padding: 1.5rem;
+  }
+  .notesGroup {
+    grid-column: 1 / -1;
+  }
+  .editActions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+  .addItemsButton {
+    margin-right: 0;
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* --- Print Styles --- */
+@media print {
+  /* ... (Keep existing Print styles - they should work with the comma-separated list now) ... */
+  body * {
+    visibility: hidden !important;
+  }
+  #invoice-modal-content,
+  #invoice-modal-content * {
+    visibility: visible !important;
+  }
+  #invoice-modal-content {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0.75in !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    display: block !important;
+    background-color: transparent !important;
+    z-index: auto !important;
+    color: #000 !important;
+    font-family: "Times New Roman", Times, serif !important;
+    font-size: 11pt !important;
+  }
+  .invoiceModalOverlay,
+  #invoice-modal-content .closeInvoiceButton,
+  #invoice-modal-content .invoiceActions,
+  .openButton {
+    display: none !important;
+    visibility: hidden !important;
+  }
+  #invoice-modal-content .invoiceItemList {
+    overflow: visible !important;
+    max-height: none !important;
+  }
+  #invoice-modal-content h2 {
+    color: #000 !important;
+    margin: 0 0 20px 0 !important;
+    text-align: center !important;
+    font-size: 16pt !important;
+    font-weight: bold !important;
+    border-bottom: 1px solid #000;
+    padding-bottom: 8px;
+    page-break-after: avoid;
+    display: block !important;
+  }
+  #invoice-modal-content .invoiceHeader {
+    border: none !important;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed #888;
+    page-break-after: avoid;
+  }
+  #invoice-modal-content .invoiceHeaderGrid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0 1in !important;
+    margin-bottom: 10px !important;
+  } /* Keep 2 columns for print */
+  #invoice-modal-content .invoiceHeaderGrid p {
+    margin-bottom: 4px;
+    font-size: 10pt;
+    line-height: 1.4;
+  }
+  #invoice-modal-content .invoiceHeaderGrid p strong {
+    font-size: 10pt;
+    min-width: 70px;
+    font-weight: bold;
+  }
+  #invoice-modal-content .invoiceNotes {
+    background: none !important;
+    padding: 0;
+    border: none;
+    font-size: 10pt;
+    margin-top: 8px;
+    grid-column: 1 / -1;
+  }
+  #invoice-modal-content .invoiceNotes strong {
+    font-size: 10pt;
+    margin-bottom: 2px;
+  }
+  #invoice-modal-content .invoiceSeparator {
+    display: none;
+  }
+  #invoice-modal-content .invoiceItemList h3 {
+    font-size: 13pt !important;
+    color: #000 !important;
+    margin: 20px 0 10px 0;
+    text-decoration: underline;
+    page-break-before: auto;
+    page-break-after: avoid;
+  }
+  .invoiceTypeGroup {
+    margin-bottom: 15px;
+    page-break-inside: avoid;
+  }
+  .invoiceListHeader {
+    font-size: 12pt !important;
+    font-weight: bold !important;
+    color: #000 !important;
+    margin: 15px 0 8px 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    text-decoration: underline;
+    page-break-after: avoid;
+  }
+  .invoiceCategoryGroup {
+    margin-left: 10px;
+    margin-bottom: 10px;
+    page-break-inside: avoid;
+  }
+  .invoiceCategoryGroup h5 {
+    font-size: 11pt !important;
+    color: #333 !important;
+    font-weight: bold !important;
+    margin: 8px 0 3px 0 !important;
+    border: none !important;
+    padding: 0 0 2px 5px;
+    page-break-after: avoid;
+  }
+  /* Print: Item Display */
+  .invoiceCategoryGroup ul {
+    display: none !important;
+  }
+  .invoiceItemsCommaSeparated {
+    display: block !important;
+    visibility: visible !important;
+    font-size: 10pt !important;
+    padding: 2px 0 2px 15px;
+    line-height: 1.5 !important;
+    page-break-inside: avoid;
+    color: #000 !important;
+  }
+  .itemCategory {
+    display: none !important;
+  }
+}

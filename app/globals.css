@@ -1,0 +1,64 @@
+/* ADD THIS TO THE BOTTOM OF app/globals.css */
+
+@media print {
+  /* Hide everything on the page by default */
+  body * {
+    visibility: hidden;
+  }
+
+  /* Make the order summary modal and its contents visible */
+  #order-summary-modal, #order-summary-modal * {
+    visibility: visible;
+  }
+
+  /*
+    Make the printable area take up the whole page,
+    and remove the modal's boxy look.
+  */
+  #order-summary-modal {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+  }
+  
+  /* Hide the parts of the modal we DON'T want to print */
+  #order-summary-modal .closeButton,
+  #order-summary-modal .controls,
+  #order-summary-modal .buttonContainer,
+  #order-summary-modal .note {
+    display: none;
+  }
+  
+  /* Ensure the list container shows everything */
+  #order-summary-modal .listContainer {
+    max-height: none;
+    overflow-y: visible;
+  }
+
+  /* Use simple, print-friendly styles */
+  #order-summary-modal .listHeader {
+    color: #000;
+    border-color: #aaa;
+    margin-top: 20px;
+  }
+  #order-summary-modal .subListHeader {
+    color: #333;
+  }
+  #order-summary-modal .item {
+    border-color: #ddd;
+    padding: 8px 0;
+  }
+  #order-summary-modal .itemName {
+     color: #000;
+     font-weight: normal;
+  }
+  
+  /* Add a print-only title */
+  #order-summary-modal h2 {
+     color: #000;
+  }
+}
