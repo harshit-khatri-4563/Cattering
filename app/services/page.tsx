@@ -1,7 +1,7 @@
 // app/services/page.tsx
 'use client'; // This makes the page interactive
 
-import { useState } from 'react'; 
+import { useState, Suspense } from 'react'; 
 import ServiceItem from '@/components/ServiceItem';
 import styles from './ServicesPage.module.css'; // Uses the ServicesPage.module.css file
 
@@ -88,16 +88,14 @@ const servicesData = [
 ];
 // --- END DUMMY DATA ---
 
-export default function ServicesPage() {
-  // State to track the active category. Initialize with the first one.
+// Separate component to handle the services content
+function ServicesContent() {
   const [activeCategory, setActiveCategory] = useState(servicesData[0].mainCategory);
 
-  // Find the data for the currently active category
   const activeCategoryData = servicesData.find(
     (category) => category.mainCategory === activeCategory
   );
   
-  // Get the items to display, or an empty array if none are found
   const itemsToShow = activeCategoryData ? activeCategoryData.items : [];
 
   return (
@@ -111,9 +109,7 @@ export default function ServicesPage() {
             {servicesData.map((category) => (
               <li key={category.mainCategory}>
                 <button
-                  // Add 'active' class if this is the selected category
                   className={activeCategory === category.mainCategory ? styles.active : ''}
-                  // On click, update the state to this category
                   onClick={() => setActiveCategory(category.mainCategory)}
                 >
                   {category.mainCategory}
@@ -134,12 +130,21 @@ export default function ServicesPage() {
                 name={item.name}
                 description={item.description}
                 imageUrl={item.imageUrl}
-                category={activeCategory} // Pass the category name
+                category={activeCategory}
               />
             ))}
           </div>
         </main>
       </div>
     </div>
+  );
+}
+
+// Main component with Suspense boundary
+export default function ServicesPage() {
+  return (
+    <Suspense fallback={<div className={styles.menuPage}><h1>Loading services...</h1></div>}>
+      <ServicesContent />
+    </Suspense>
   );
 }

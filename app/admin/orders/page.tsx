@@ -187,7 +187,7 @@ export default function AdminOrdersPage() {
   const handleMarkCompleted = (recordIdToComplete: number) => {
      if (window.confirm('Mark this order as completed? It will move to the Completed list.')) {
         const updatedOrders = allOrders.map(order =>
-          order.recordId === recordIdToComplete ? { ...order, status: 'completed' } : order
+          order.recordId === recordIdToComplete ? { ...order, status: 'completed' as const } : order
         );
         saveOrdersToLocalStorage(updatedOrders);
      }
@@ -197,7 +197,7 @@ export default function AdminOrdersPage() {
   const handleMarkActive = (recordIdToActivate: number) => {
      if (window.confirm('Mark this order as active again?')) {
         const updatedOrders = allOrders.map(order =>
-          order.recordId === recordIdToActivate ? { ...order, status: 'active' } : order
+          order.recordId === recordIdToActivate ? { ...order, status: 'active' as const } : order
         );
         saveOrdersToLocalStorage(updatedOrders);
      }

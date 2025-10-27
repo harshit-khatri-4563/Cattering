@@ -1,7 +1,7 @@
 // app/menu/page.tsx
 'use client'; 
 
-import { useState } from 'react'; 
+import { useState, Suspense } from 'react'; 
 import MenuItem from '@/components/MenuItem';
 import styles from './MenuPage.module.css'; 
 
@@ -291,16 +291,14 @@ const menuData = [
 ];
 // --- END DUMMY DATA ---
 
-export default function MenuPage() {
-  // 1. State to track the active category. Initialize with the first one.
+// Separate component to handle search params
+function MenuContent() {
   const [activeCategory, setActiveCategory] = useState(menuData[0].mainCategory);
 
-  // 2. Find the data for the currently active category
   const activeCategoryData = menuData.find(
     (category) => category.mainCategory === activeCategory
   );
   
-  // 3. Get the items to display, or an empty array if none are found
   const itemsToShow = activeCategoryData ? activeCategoryData.items : [];
 
   return (
@@ -314,9 +312,7 @@ export default function MenuPage() {
             {menuData.map((category) => (
               <li key={category.mainCategory}>
                 <button
-                  // Add 'active' class if this is the selected category
                   className={activeCategory === category.mainCategory ? styles.active : ''}
-                  // On click, update the state to this category
                   onClick={() => setActiveCategory(category.mainCategory)}
                 >
                   {category.mainCategory}
@@ -337,12 +333,21 @@ export default function MenuPage() {
                 name={item.name}
                 description={item.description}
                 imageUrl={item.imageUrl}
-                category={activeCategory} // Pass the category name
+                category={activeCategory}
               />
             ))}
           </div>
         </main>
       </div>
     </div>
+  );
+}
+
+// Main component with Suspense boundary
+export default function MenuPage() {
+  return (
+    <Suspense fallback={<div className={styles.menuPage}><h1>Loading menu...</h1></div>}>
+      <MenuContent />
+    </Suspense>
   );
 }
