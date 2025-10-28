@@ -295,12 +295,17 @@ export default function AdminOrdersPage() {
             <h2>Order Invoice / Item List</h2>
             <div id="printable-invoice-area">
                 <div className={styles.invoiceHeader}>
-                    <p><strong>Order ID:</strong> {invoiceOrder.recordId}</p>
-                    <p><strong>Saved:</strong> {new Date(invoiceOrder.createdAt).toLocaleString()}</p>
-                    {invoiceOrder.name && <p><strong>Name:</strong> {invoiceOrder.name}</p>}
-                    {invoiceOrder.venue && <p><strong>Venue:</strong> {invoiceOrder.venue}</p>}
-                    {invoiceOrder.event_date && <p><strong>Date:</strong> {invoiceOrder.event_date}</p>}
-                    {invoiceOrder.event_time && <p><strong>Time:</strong> {invoiceOrder.event_time}</p>}
+                    {/* Grid for top details */}
+                    <div className={styles.invoiceHeaderGrid}>
+                        {/* Items will flow into 2 columns via CSS */}
+                        <p><strong>Order ID:</strong> {invoiceOrder.recordId}</p>
+                        <p><strong>Saved:</strong> {new Date(invoiceOrder.createdAt).toLocaleString()}</p>
+                        {invoiceOrder.name && <p><strong>Name:</strong> {invoiceOrder.name}</p>}
+                        {invoiceOrder.venue && <p><strong>Venue:</strong> {invoiceOrder.venue}</p>}
+                        {invoiceOrder.event_date && <p><strong>Date:</strong> {invoiceOrder.event_date}</p>}
+                        {invoiceOrder.event_time && <p><strong>Time:</strong> {invoiceOrder.event_time}</p>}
+                    </div>
+                    {/* Notes below the grid */}
                     {invoiceOrder.notes && <p className={styles.invoiceNotes}><strong>Notes:</strong> {invoiceOrder.notes}</p>}
                 </div>
                 <hr className={styles.invoiceSeparator} />
@@ -310,19 +315,28 @@ export default function AdminOrdersPage() {
                     {/* Add explicit types to map parameters */}
                     {Object.entries(groupItemsByTypeAndCategory(invoiceOrder.items)).map(([itemType, categories]: [string, Record<string, OrderItem[]>]) => (
                         <div key={itemType} className={styles.invoiceTypeGroup}>
+                            {/* Main Type Header (Menu / Service) */}
                             <h4 className={styles.invoiceListHeader}>{itemType === 'menu' ? 'Menu Items' : 'Services'}</h4>
+                            {/* Iterate through categories within the type */}
                             {/* Add explicit types to map parameters */}
                             {Object.entries(categories).map(([categoryName, itemsInCategory]: [string, OrderItem[]]) => (
                                 <div key={categoryName} className={styles.invoiceCategoryGroup}>
+                                    {/* Sub Category Header (Drinks, Engagement, etc.) */}
                                     <h5>{categoryName}</h5>
-                                    <ul>
-                                        {/* Add explicit type to item */}
-                                        {itemsInCategory.map((item: OrderItem) => ( <li key={item.id}>{item.name}</li> ))}
-                                    </ul>
+
+                                    {/* --- THIS IS THE CRUCIAL PART --- */}
+                                    {/* Renders the comma-separated list of item names */}
+                                    <p className={styles.invoiceItemsCommaSeparated}>
+                                        {/* Map item names and join with ', ' */}
+                                        {itemsInCategory.map((item: OrderItem) => item.name).join(', ')}
+                                    </p>
+                                    {/* --- END CRUCIAL PART --- */}
+
                                 </div>
                             ))}
                         </div>
                     ))}
+                    {/* Message if no items exist in the order */}
                     {invoiceOrder.items.length === 0 && <p>No items found for this order.</p>}
                 </div>
             </div> {/* End Printable Area */}
