@@ -5,7 +5,7 @@ import styles from './MenuItem.module.css';
 import { useOrder, OrderItem } from '@/context/OrderContext';
 import { useSearchParams } from 'next/navigation';
 import { SavedOrderRecord } from './OrderSummary';
-import { useState, useEffect } from 'react'; // Import useState and useEffect
+import { useState, useEffect } from 'react';
 
 interface MenuItemProps {
   id: string;
@@ -16,95 +16,96 @@ interface MenuItemProps {
 }
 
 const MenuItem = ({ id, name, description, imageUrl, category }: MenuItemProps) => {
-  const { addItem, removeItem, isItemInOrder: isItemInContextOrder } = useOrder(); // Renamed for clarity
+  const { items, addItem, removeItem, isItemInOrder: isItemInContextOrder } = useOrder(); // Get items from context for dependency array
   const searchParams = useSearchParams();
   const editOrderIdParam = searchParams.get('editOrderId');
 
-  // --- State for Button Appearance ---
   const [buttonState, setButtonState] = useState({
     text: 'Add to Order',
     className: styles.addButton,
     disabled: false,
-    _inOrder: false, // Internal state to track if item is in order
+    _inOrder: false,
   });
-  const [isClient, setIsClient] = useState(false); // Track if component is mounted
+  const [isClient, setIsClient] = useState(false);
 
-  // --- Determine Edit Mode (runs on both server and client initially) ---
   const isEditingExistingOrder = !!editOrderIdParam;
   const editOrderId = isEditingExistingOrder ? parseInt(editOrderIdParam!, 10) : null;
 
   // --- Effect to Update Button State After Mount ---
   useEffect(() => {
-    setIsClient(true); // Component has mounted on the client
-
+    setIsClient(true);
     let currentInOrder = false;
 
     if (isEditingExistingOrder && editOrderId !== null) {
-      // Check Local Storage (only runs client-side)
+      // Check Local Storage (client-side)
       const existingOrdersJSON = localStorage.getItem('savedCateringOrders');
       const existingOrders: SavedOrderRecord[] = existingOrdersJSON ? JSON.parse(existingOrdersJSON) : [];
       const orderBeingEdited = existingOrders.find(o => o.recordId === editOrderId);
       currentInOrder = orderBeingEdited ? orderBeingEdited.items.some(item => item.id === id) : false;
 
-      // Update button state based on Local Storage check
+      // Update button state (Add/Remove for edit mode)
       setButtonState({
-        text: currentInOrder ? 'Item Added' : 'Add to Saved Order',
-        className: currentInOrder ? styles.disabledButton : styles.addButton,
-        disabled: currentInOrder, // Disable if already added in edit mode
+        text: currentInOrder ? 'Remove from Saved' : 'Add to Saved Order', // CHANGED TEXT
+        className: currentInOrder ? styles.removeButton : styles.addButton, // CHANGED CLASS
+        disabled: false, // **No longer disabled in edit mode**
         _inOrder: currentInOrder,
       });
 
     } else {
-      // Check Context (only runs client-side effectively for state update)
+      // Check Context (new order)
       currentInOrder = isItemInContextOrder(id);
-
-      // Update button state based on Context check
       setButtonState({
         text: currentInOrder ? 'Remove' : 'Add to Order',
         className: currentInOrder ? styles.removeButton : styles.addButton,
-        disabled: false, // Never disabled when adding to new order
+        disabled: false,
         _inOrder: currentInOrder,
       });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, editOrderId, isEditingExistingOrder, isItemInContextOrder]); // Dependencies
+  }, [id, editOrderId, isEditingExistingOrder, isItemInContextOrder, items]); // Added items dependency for context updates
 
-  // --- Toggle Handler (uses buttonState._inOrder) ---
+  // --- Toggle Handler (Add/Remove for BOTH modes, no alerts) ---
   const handleToggle = () => {
-    // Prevent action if not yet mounted (though button likely won't show anyway)
      if (!isClient) return;
 
     if (isEditingExistingOrder && editOrderId !== null) {
-      // Logic for Editing Existing Order (Local Storage)
+      // --- Logic for Editing Existing Order (Local Storage) ---
       const existingOrdersJSON = localStorage.getItem('savedCateringOrders');
       let existingOrders: SavedOrderRecord[] = existingOrdersJSON ? JSON.parse(existingOrdersJSON) : [];
       const orderIndex = existingOrders.findIndex(o => o.recordId === editOrderId);
 
       if (orderIndex === -1) {
-        alert("Error: Could not find the order being edited."); return;
+        // alert("Error: Could not find the order being edited."); // Popup removed
+        console.error("Error: Could not find the order being edited.");
+        return;
       }
 
       const orderBeingEdited = existingOrders[orderIndex];
+      const itemIndexInEditedOrder = orderBeingEdited.items.findIndex(item => item.id === id);
 
-      if (buttonState._inOrder) { // Check internal state
-         alert(`${name} is already in the order. Remove items on the admin page.`);
-      } else {
+      if (itemIndexInEditedOrder > -1) { // If item exists, remove it
+         orderBeingEdited.items.splice(itemIndexInEditedOrder, 1); // Remove item from array
+         localStorage.setItem('savedCateringOrders', JSON.stringify(existingOrders));
+         // alert(`${name} removed from saved order.`); // Popup removed
+         // Update button state immediately
+         setButtonState({ text: 'Add to Saved Order', className: styles.addButton, disabled: false, _inOrder: false });
+      } else { // If item doesn't exist, add it
         const newItem: OrderItem = { id, name, type: 'menu', category: category };
         orderBeingEdited.items.push(newItem);
         localStorage.setItem('savedCateringOrders', JSON.stringify(existingOrders));
-        alert(`${name} added to saved order.`);
-        // Update button state immediately after adding
-        setButtonState({ text: 'Item Added', className: styles.disabledButton, disabled: true, _inOrder: true });
-        // No need for reload if state updates correctly
+        // alert(`${name} added to saved order.`); // Popup removed
+        // Update button state immediately
+        setButtonState({ text: 'Remove from Saved', className: styles.removeButton, disabled: false, _inOrder: true });
       }
+
     } else {
-      // Logic for New Order (Context)
+      // --- Logic for New Order (Context) ---
       if (buttonState._inOrder) { // Check internal state
         removeItem(id);
-        // State will update via useEffect recalculation
+        // State will update via useEffect recalculation from context change
       } else {
         addItem({ id, name, type: 'menu', category: category });
-        // State will update via useEffect recalculation
+        // State will update via useEffect recalculation from context change
       }
     }
   };
@@ -115,23 +116,17 @@ const MenuItem = ({ id, name, description, imageUrl, category }: MenuItemProps) 
       <div className={styles.content}>
         <h3>{name}</h3>
         <p>{description}</p>
-        {/* Render button only after mounting or use initial state */}
+        {/* Render button based on state */}
         {isClient ? (
              <button
                 onClick={handleToggle}
                 className={buttonState.className}
-                disabled={buttonState.disabled}
+                disabled={buttonState.disabled} // Should be false now in edit mode
              >
             {buttonState.text}
              </button>
-        ) : (
-            // Render a default button state on the server and initial client render
-             <button
-                className={styles.addButton} // Default to add button style
-                disabled={true} // Initially disabled until client check runs
-             >
-                Add to Order
-             </button>
+        ) : ( // Default server render
+             <button className={styles.addButton} disabled={true}> Add to Order </button>
         )}
       </div>
     </div>

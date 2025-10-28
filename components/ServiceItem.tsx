@@ -4,7 +4,8 @@ import Image from 'next/image';
 import styles from './MenuItem.module.css'; // Reuse MenuItem styles
 import { useOrder, OrderItem } from '@/context/OrderContext';
 import { useSearchParams } from 'next/navigation';
-import { SavedOrderRecord } from './OrderSummary'; // Import type
+import { SavedOrderRecord } from './OrderSummary';
+import { useState, useEffect } from 'react'; // Import useState and useEffect
 
 interface ServiceItemProps {
   id: string;
@@ -15,28 +16,60 @@ interface ServiceItemProps {
 }
 
 const ServiceItem = ({ id, name, description, imageUrl, category }: ServiceItemProps) => {
-  const { addItem, removeItem, isItemInOrder } = useOrder();
+  const { items, addItem, removeItem, isItemInOrder: isItemInContextOrder } = useOrder(); // Get items for dependency
   const searchParams = useSearchParams();
   const editOrderIdParam = searchParams.get('editOrderId');
 
+  // --- State for Button Appearance ---
+  const [buttonState, setButtonState] = useState({
+    text: 'Add to Order',
+    className: styles.addButton,
+    disabled: false,
+    _inOrder: false, // Internal state to track if item is in order
+  });
+  const [isClient, setIsClient] = useState(false); // Track if component is mounted
+
+  // --- Determine Edit Mode ---
   const isEditingExistingOrder = !!editOrderIdParam;
   const editOrderId = isEditingExistingOrder ? parseInt(editOrderIdParam!, 10) : null;
 
-  // --- Check if item is in the relevant order ---
-  let inOrder = false;
-  if (isEditingExistingOrder && editOrderId !== null) {
-    const existingOrdersJSON = typeof window !== 'undefined' ? localStorage.getItem('savedCateringOrders') : null;
-    const existingOrders: SavedOrderRecord[] = existingOrdersJSON ? JSON.parse(existingOrdersJSON) : [];
-    const orderBeingEdited = existingOrders.find(o => o.recordId === editOrderId);
-    inOrder = orderBeingEdited ? orderBeingEdited.items.some(item => item.id === id) : false;
-  } else {
-    inOrder = isItemInOrder(id);
-  }
-  // --- End Check ---
+  // --- Effect to Update Button State After Mount ---
+  useEffect(() => {
+    setIsClient(true); // Component has mounted on the client
+    let currentInOrder = false;
 
+    if (isEditingExistingOrder && editOrderId !== null) {
+      // Check Local Storage (client-side)
+      const existingOrdersJSON = localStorage.getItem('savedCateringOrders');
+      const existingOrders: SavedOrderRecord[] = existingOrdersJSON ? JSON.parse(existingOrdersJSON) : [];
+      const orderBeingEdited = existingOrders.find(o => o.recordId === editOrderId);
+      currentInOrder = orderBeingEdited ? orderBeingEdited.items.some(item => item.id === id) : false;
 
-  // --- Updated Toggle Handler ---
+      // Update button state (Add/Remove for edit mode)
+      setButtonState({
+        text: currentInOrder ? 'Remove from Saved' : 'Add to Saved Order',
+        className: currentInOrder ? styles.removeButton : styles.addButton,
+        disabled: false, // Not disabled
+        _inOrder: currentInOrder,
+      });
+
+    } else {
+      // Check Context (new order)
+      currentInOrder = isItemInContextOrder(id);
+      setButtonState({
+        text: currentInOrder ? 'Remove' : 'Add to Order',
+        className: currentInOrder ? styles.removeButton : styles.addButton,
+        disabled: false,
+        _inOrder: currentInOrder,
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, editOrderId, isEditingExistingOrder, isItemInContextOrder, items]); // Added items dependency
+
+  // --- Toggle Handler (Add/Remove for BOTH modes, no alerts) ---
   const handleToggle = () => {
+     if (!isClient) return;
+
     if (isEditingExistingOrder && editOrderId !== null) {
       // --- Logic for Editing Existing Order (Local Storage) ---
       const existingOrdersJSON = localStorage.getItem('savedCateringOrders');
@@ -44,47 +77,37 @@ const ServiceItem = ({ id, name, description, imageUrl, category }: ServiceItemP
       const orderIndex = existingOrders.findIndex(o => o.recordId === editOrderId);
 
       if (orderIndex === -1) {
-        alert("Error: Could not find the order being edited.");
+        console.error("Error: Could not find the order being edited."); // Log error instead of alert
         return;
       }
 
       const orderBeingEdited = existingOrders[orderIndex];
-      const itemExistsInEditedOrder = orderBeingEdited.items.some(item => item.id === id);
+      const itemIndexInEditedOrder = orderBeingEdited.items.findIndex(item => item.id === id);
 
-      if (itemExistsInEditedOrder) {
-         alert(`${name} is already in the order. Remove items on the admin page.`);
-      } else {
-        // Add item to the specific order in local storage
+      if (itemIndexInEditedOrder > -1) { // If item exists, remove it
+         orderBeingEdited.items.splice(itemIndexInEditedOrder, 1); // Remove item
+         localStorage.setItem('savedCateringOrders', JSON.stringify(existingOrders));
+         // Update button state immediately
+         setButtonState({ text: 'Add to Saved Order', className: styles.addButton, disabled: false, _inOrder: false });
+      } else { // If item doesn't exist, add it
         const newItem: OrderItem = { id, name, type: 'service', category: category }; // Correct type: 'service'
         orderBeingEdited.items.push(newItem);
         localStorage.setItem('savedCateringOrders', JSON.stringify(existingOrders));
-        alert(`${name} added to saved order.`);
-        window.location.reload(); // Simple refresh
+        // Update button state immediately
+        setButtonState({ text: 'Remove from Saved', className: styles.removeButton, disabled: false, _inOrder: true });
       }
 
     } else {
       // --- Logic for New Order (Context) ---
-      if (inOrder) {
+      if (buttonState._inOrder) { // Check internal state
         removeItem(id);
+        // State will update via useEffect recalculation from context change
       } else {
         addItem({ id, name, type: 'service', category: category }); // Correct type: 'service'
+        // State will update via useEffect recalculation from context change
       }
     }
   };
-  // --- End Updated Handler ---
-
-
-  // Determine button text and style
-  let buttonText = 'Add to Order';
-  let buttonClass = styles.addButton;
-  if (isEditingExistingOrder) {
-      buttonText = inOrder ? 'Item Added' : 'Add to Saved Order';
-      buttonClass = inOrder ? styles.disabledButton : styles.addButton;
-  } else if (inOrder) {
-      buttonText = 'Remove';
-      buttonClass = styles.removeButton;
-  }
-
 
   return (
     <div className={styles.card}>
@@ -92,13 +115,18 @@ const ServiceItem = ({ id, name, description, imageUrl, category }: ServiceItemP
       <div className={styles.content}>
         <h3>{name}</h3>
         <p>{description}</p>
-        <button
-          onClick={handleToggle}
-          className={buttonClass}
-          disabled={isEditingExistingOrder && inOrder} // Disable if editing and item already added
-        >
-          {buttonText}
-        </button>
+        {/* Render button based on state */}
+        {isClient ? (
+             <button
+                onClick={handleToggle}
+                className={buttonState.className}
+                disabled={buttonState.disabled} // Should be false now in edit mode
+             >
+            {buttonState.text}
+             </button>
+        ) : ( // Default server render
+             <button className={styles.addButton} disabled={true}> Add to Order </button>
+        )}
       </div>
     </div>
   );
