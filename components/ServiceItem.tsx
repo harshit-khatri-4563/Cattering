@@ -4,7 +4,7 @@ import Image from 'next/image';
 import styles from './MenuItem.module.css'; // Reuse MenuItem styles
 import { useOrder, OrderItem } from '@/context/OrderContext';
 import { useSearchParams } from 'next/navigation';
-import { SavedOrderRecord } from './OrderSummary';
+import { SavedOrderRecord } from './OrderSummary'; // Import type
 import { useState, useEffect } from 'react'; // Import useState and useEffect
 
 interface ServiceItemProps {
@@ -16,7 +16,8 @@ interface ServiceItemProps {
 }
 
 const ServiceItem = ({ id, name, description, imageUrl, category }: ServiceItemProps) => {
-  const { items, addItem, removeItem, isItemInOrder: isItemInContextOrder } = useOrder(); // Get items for dependency
+  // Get items from context to use as dependency in useEffect
+  const { items, addItem, removeItem, isItemInOrder: isItemInContextOrder } = useOrder();
   const searchParams = useSearchParams();
   const editOrderIdParam = searchParams.get('editOrderId');
 
@@ -25,9 +26,9 @@ const ServiceItem = ({ id, name, description, imageUrl, category }: ServiceItemP
     text: 'Add to Order',
     className: styles.addButton,
     disabled: false,
-    _inOrder: false, // Internal state to track if item is in order
+    _inOrder: false, // Internal state
   });
-  const [isClient, setIsClient] = useState(false); // Track if component is mounted
+  const [isClient, setIsClient] = useState(false); // Track mount
 
   // --- Determine Edit Mode ---
   const isEditingExistingOrder = !!editOrderIdParam;
@@ -35,7 +36,7 @@ const ServiceItem = ({ id, name, description, imageUrl, category }: ServiceItemP
 
   // --- Effect to Update Button State After Mount ---
   useEffect(() => {
-    setIsClient(true); // Component has mounted on the client
+    setIsClient(true);
     let currentInOrder = false;
 
     if (isEditingExistingOrder && editOrderId !== null) {
@@ -64,7 +65,7 @@ const ServiceItem = ({ id, name, description, imageUrl, category }: ServiceItemP
       });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, editOrderId, isEditingExistingOrder, isItemInContextOrder, items]); // Added items dependency
+  }, [id, editOrderId, isEditingExistingOrder, isItemInContextOrder, items]); // Added 'items' dependency
 
   // --- Toggle Handler (Add/Remove for BOTH modes, no alerts) ---
   const handleToggle = () => {
@@ -77,7 +78,7 @@ const ServiceItem = ({ id, name, description, imageUrl, category }: ServiceItemP
       const orderIndex = existingOrders.findIndex(o => o.recordId === editOrderId);
 
       if (orderIndex === -1) {
-        console.error("Error: Could not find the order being edited."); // Log error instead of alert
+        console.error("Error: Could not find the order being edited.");
         return;
       }
 
@@ -90,7 +91,7 @@ const ServiceItem = ({ id, name, description, imageUrl, category }: ServiceItemP
          // Update button state immediately
          setButtonState({ text: 'Add to Saved Order', className: styles.addButton, disabled: false, _inOrder: false });
       } else { // If item doesn't exist, add it
-        const newItem: OrderItem = { id, name, type: 'service', category: category }; // Correct type: 'service'
+        const newItem: OrderItem = { id, name, type: 'service', category: category }; // *** Correct type: 'service' ***
         orderBeingEdited.items.push(newItem);
         localStorage.setItem('savedCateringOrders', JSON.stringify(existingOrders));
         // Update button state immediately
@@ -101,10 +102,8 @@ const ServiceItem = ({ id, name, description, imageUrl, category }: ServiceItemP
       // --- Logic for New Order (Context) ---
       if (buttonState._inOrder) { // Check internal state
         removeItem(id);
-        // State will update via useEffect recalculation from context change
       } else {
-        addItem({ id, name, type: 'service', category: category }); // Correct type: 'service'
-        // State will update via useEffect recalculation from context change
+        addItem({ id, name, type: 'service', category: category }); // *** Correct type: 'service' ***
       }
     }
   };
@@ -120,7 +119,7 @@ const ServiceItem = ({ id, name, description, imageUrl, category }: ServiceItemP
              <button
                 onClick={handleToggle}
                 className={buttonState.className}
-                disabled={buttonState.disabled} // Should be false now in edit mode
+                disabled={buttonState.disabled}
              >
             {buttonState.text}
              </button>

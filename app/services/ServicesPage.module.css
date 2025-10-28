@@ -106,3 +106,27 @@
     grid-template-columns: 1fr;
   }
 }
+/* ADD THESE RULES to app/services/ServicesPage.module.css */
+
+/* ... (Keep existing styles for .editHeader, .doneEditingButton, etc.) ... */
+
+.viewUpdatedOrderButton {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  padding: 0.8rem 1.5rem;
+  background-color: var(--primary-color); /* Red */
+  color: white;
+  text-decoration: none;
+  border-radius: 50px; /* Pill shape */
+  font-weight: bold;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.viewUpdatedOrderButton:hover {
+  background-color: var(--primary-hover); /* Darker red */
+  transform: scale(1.05);
+}

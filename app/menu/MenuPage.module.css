@@ -106,3 +106,46 @@
     grid-template-columns: 1fr;
   }
 }
+/* ADD THESE RULES to app/menu/MenuPage.module.css */
+
+/* ... (Keep existing styles for .editHeader, .doneEditingButton, etc.) ... */
+/* MODIFY THIS RULE */
+.editHeader {
+  /* display: flex; */ /* Remove flex */
+  /* justify-content: space-between; */ /* Remove */
+  /* align-items: center; */ /* Remove */
+  text-align: center; /* Center the title */
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.editHeader h1 {
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin: 0;
+}
+/* REPLACE .viewUpdatedOrderButton with this */
+
+.finishEditingButton { /* Renamed */
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  padding: 0.8rem 1.5rem;
+  background-color: #2ecc71; /* Green */
+  color: white;
+  text-decoration: none;
+  border: none; /* Ensure no border */
+  border-radius: 50px; /* Pill shape */
+  font-weight: bold;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  cursor: pointer; /* Add cursor */
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.finishEditingButton:hover {
+  background-color: #27ae60; /* Darker green */
+  transform: scale(1.05);
+}
