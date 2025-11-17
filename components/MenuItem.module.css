@@ -5,6 +5,10 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   transition: transform 0.3s;
+  /* Use Flexbox to structure the card */
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Make card fill its grid cell */
 }
 
 .card:hover {
@@ -13,12 +17,19 @@
 
 .content {
   padding: 1.5rem;
+  /* Make content area fill available space */
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .content h3 {
   font-size: 1.25rem;
   color: var(--text-color-dark);
   margin-bottom: 0.5rem;
+  line-height: 1.3; /* Set explicit line height */
+  /* --- FIX: Reserve space for 2 lines on desktop --- */
+  min-height: 3.25rem; /* (1.25rem * 1.3 * 2 lines) */
 }
 
 .content p {
@@ -26,36 +37,73 @@
   color: #666;
   line-height: 1.5;
   margin-bottom: 1rem;
+  /* Make description expand to push button down */
+  flex-grow: 1;
 }
 
-/* THIS IS THE MISSING STYLE FOR "ADD TO ORDER" */
+/* Push all buttons to the bottom of the card */
+.addButton,
+.removeButton,
+.disabledButton {
+  margin-top: auto; /* This forces the button to the bottom */
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+/* Red "Add" Button */
 .addButton {
-  padding: 0.5rem 1rem;
-  font-size: 0.9rem;
-  background-color: var(--primary-color); /* The red color */
-  color: var(--white);
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+  background-color: var(--primary-color) !important;
+  color: var(--white) !important;
 }
-
 .addButton:hover {
-  background-color: var(--primary-hover); /* The lighter red */
+  background-color: var(--primary-hover) !important;
 }
 
-/* THIS IS THE NEW STYLE FOR "REMOVE" */
+/* Grey "Remove" Button */
 .removeButton {
-  padding: 0.5rem 1rem;
-  font-size: 0.9rem;
-  background-color: #7f8c8d; /* A neutral gray color */
-  color: var(--white);
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+  background-color: #7f8c8d !important;
+  color: var(--white) !important;
+}
+.removeButton:hover {
+  background-color: #95a5a6 !important;
 }
 
-.removeButton:hover {
-  background-color: #95a5a6; /* Lighter gray on hover */
+/* Grey "Disabled" Button */
+.disabledButton {
+  background-color: #bdc3c7 !important;
+  color: #7f8c8d !important;
+  cursor: not-allowed;
+}
+
+
+/* --- Mobile Styles for Cards --- */
+@media (max-width: 768px) {
+  .content {
+    padding: 1rem;
+  }
+
+  .content h3 {
+    font-size: 1rem;
+    line-height: 1.3;
+    margin-bottom: 0.4rem;
+    /* --- FIX: Reserve space for 2 lines on mobile --- */
+    min-height: 2.6rem; /* (1rem * 1.3 * 2 lines) */
+  }
+
+  .content p {
+    font-size: 0.8rem;
+    line-height: 1.4;
+    margin-bottom: 0.8rem;
+  }
+
+  .addButton,
+  .removeButton,
+  .disabledButton {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
 }

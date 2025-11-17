@@ -1,3 +1,4 @@
+/* app/contact/ContactPage.module.css */
 .contactPage {
   max-width: 1200px;
   margin: 0 auto;
@@ -8,6 +9,7 @@
   text-align: center;
   font-size: 3rem;
   margin-bottom: 1rem;
+  color: var(--dark-background);
 }
 
 .subtitle {
@@ -19,24 +21,49 @@
 
 .container {
   display: grid;
+  /* Desktop: 2 columns */
   grid-template-columns: 1fr 1fr;
   gap: 3rem;
 }
 
-@media (max-width: 768px) {
-  .container {
-    grid-template-columns: 1fr;
-  }
+.info {
+  /* Add padding for better spacing */
+  padding-right: 1rem;
 }
 
 .info h3 {
   font-size: 1.8rem;
-  color: var(--primary-color); /* Use variable */
+  color: var(--primary-color);
   margin-bottom: 1.5rem;
 }
 
 .info p {
   font-size: 1.1rem;
   line-height: 1.8;
-  color: var(--text-color-dark); /* Use variable */
+  color: var(--text-color-dark);
+  margin-bottom: 0.5rem; /* Tighter spacing */
+}
+
+/* --- MOBILE FIX --- */
+@media (max-width: 768px) {
+  .contactPage {
+    padding: 2rem 1.5rem;
+  }
+  .contactPage h1 {
+    font-size: 2.5rem;
+  }
+  .subtitle {
+    margin-bottom: 3rem;
+  }
+
+  /* Stack to 1 column on mobile */
+  .container {
+    grid-template-columns: 1fr;
+    gap: 3rem; /* Keep vertical gap */
+  }
+
+  .info {
+    padding-right: 0; /* Remove side padding on mobile */
+    text-align: center; /* Center-align info */
+  }
 }

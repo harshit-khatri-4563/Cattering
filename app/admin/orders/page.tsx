@@ -1,52 +1,35 @@
 // app/admin/orders/page.tsx
 'use client';
 import { useState, useEffect, useMemo } from 'react';
-// Import SavedOrderRecord from OrderSummary, OrderItem directly from context
+// Import interfaces
 import { SavedOrderRecord } from '@/components/OrderSummary';
-import { OrderItem } from '@/context/OrderContext'; // Correct import path for OrderItem
+import { OrderItem } from '@/context/OrderContext';
 import styles from './AdminOrders.module.css';
 import { useRouter } from 'next/navigation';
 
-// --- Helper Function (Groups items first by type ('menu'/'service'), then by category) ---
+// --- Helper Function (Groups items first by type, then by category) ---
 const groupItemsByTypeAndCategory = (items: OrderItem[]) => {
-  // Define the expected return structure type
   type GroupedStructure = Partial<Record<'menu' | 'service', Record<string, OrderItem[]>>>;
-
   return items.reduce((acc: GroupedStructure, item: OrderItem) => {
-    const type = item.type;
-    const category = item.category;
-
-    if (!acc[type]) {
-      acc[type] = {};
-    }
-    // Type assertion to assure TypeScript that acc[type] is not undefined here
+    const type = item.type; const category = item.category;
+    if (!acc[type]) { acc[type] = {}; }
     const typeGroup = acc[type]!;
-    if (!typeGroup[category]) {
-      typeGroup[category] = [];
-    }
-    // Type assertion
+    if (!typeGroup[category]) { typeGroup[category] = []; }
     typeGroup[category]!.push(item);
     return acc;
-  }, {} as GroupedStructure); // Initialize with the defined type
+  }, {} as GroupedStructure);
 };
-// --- END HELPER ---
 
-// --- Helper Function (Groups items JUST by category) ---
+// --- Helper Function (Groups items JUST by category - for edit modal) ---
 const groupItems = (items: OrderItem[]) => {
-  // Define the expected return structure type
   type GroupedByCategory = Record<string, OrderItem[]>;
-
   return items.reduce((acc: GroupedByCategory, item: OrderItem) => {
     const category = item.category;
-    if (!acc[category]) {
-      acc[category] = [];
-    }
+    if (!acc[category]) { acc[category] = []; }
     acc[category].push(item);
     return acc;
-  }, {} as GroupedByCategory); // Initialize with the defined type
+  }, {} as GroupedByCategory);
 };
-// --- END HELPER ---
-
 
 export default function AdminOrdersPage() {
   const [allOrders, setAllOrders] = useState<SavedOrderRecord[]>([]); // Holds all orders from storage
@@ -187,6 +170,7 @@ export default function AdminOrdersPage() {
   const handleMarkCompleted = (recordIdToComplete: number) => {
      if (window.confirm('Mark this order as completed? It will move to the Completed list.')) {
         const updatedOrders = allOrders.map(order =>
+          // Add 'as const' for stricter type checking
           order.recordId === recordIdToComplete ? { ...order, status: 'completed' as const } : order
         );
         saveOrdersToLocalStorage(updatedOrders);
@@ -197,6 +181,7 @@ export default function AdminOrdersPage() {
   const handleMarkActive = (recordIdToActivate: number) => {
      if (window.confirm('Mark this order as active again?')) {
         const updatedOrders = allOrders.map(order =>
+          // Add 'as const' for stricter type checking
           order.recordId === recordIdToActivate ? { ...order, status: 'active' as const } : order
         );
         saveOrdersToLocalStorage(updatedOrders);
@@ -324,13 +309,11 @@ export default function AdminOrdersPage() {
                                     {/* Sub Category Header (Drinks, Engagement, etc.) */}
                                     <h5>{categoryName}</h5>
 
-                                    {/* --- THIS IS THE CRUCIAL PART --- */}
                                     {/* Renders the comma-separated list of item names */}
                                     <p className={styles.invoiceItemsCommaSeparated}>
                                         {/* Map item names and join with ', ' */}
                                         {itemsInCategory.map((item: OrderItem) => item.name).join(', ')}
                                     </p>
-                                    {/* --- END CRUCIAL PART --- */}
 
                                 </div>
                             ))}
@@ -365,8 +348,6 @@ export default function AdminOrdersPage() {
                  </div>
                  {order.notes && <p className={styles.notesDisplay}><strong>Notes:</strong> {order.notes}</p>}
                  <p><strong>Total Items:</strong> {order.items.length}</p>
-                 {/* Item list hidden here for brevity */}
-                 {/* <ul className={styles.itemList}> {order.items.map((item: OrderItem) => ( <li key={item.id}>{item.name} <span className={styles.itemCategory}>({item.category} / {item.type})</span></li> ))} </ul> */}
                </div>
                <div className={styles.orderActions}>
                  <button onClick={() => handleEdit(order)} className={styles.editButton}>View/Edit Details</button>

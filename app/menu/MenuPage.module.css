@@ -3,14 +3,30 @@
   max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
+  /* Prevent horizontal scroll on the main page container */
+  overflow-x: hidden;
 }
 
 .pageTitle {
   font-size: 3rem;
   text-align: center;
   margin-bottom: 3rem;
-  color: var(--dark-background); /* Use variable */
+  color: var(--dark-background);
 }
+
+/* --- Edit Mode Header --- */
+.editHeader {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+}
+.editHeader h1 {
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin: 0;
+}
+/* --- End Edit Mode Header --- */
 
 .menuLayout {
   display: grid;
@@ -26,7 +42,6 @@
   position: sticky;
   top: 2rem;
 }
-
 .categoryNav button {
   display: block;
   width: 100%;
@@ -35,40 +50,60 @@
   font-size: 1rem;
   font-weight: 500;
   text-align: left;
-  background-color: var(--light-background); /* Use variable */
+  background-color: var(--light-background);
   border: 1px solid #eee;
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.2s, color 0.2s, transform 0.2s;
 }
-
 .categoryNav button:hover {
   background-color: #f0f0f0;
   transform: translateX(5px);
 }
-
 .categoryNav button.active {
-  background-color: var(--primary-color); /* Use variable */
-  color: var(--white); /* Use variable */
+  background-color: var(--primary-color);
+  color: var(--white);
   font-weight: bold;
-  border-color: var(--primary-color); /* Use variable */
+  border-color: var(--primary-color);
 }
 
 /* --- RIGHT COLUMN: ITEM DISPLAY --- */
 .itemDisplay h2 {
   font-size: 2.2rem;
-  color: var(--dark-background); /* Use variable */
+  color: var(--dark-background);
   margin-top: 0;
   margin-bottom: 2rem;
   border-bottom: 2px solid #eee;
   padding-bottom: 0.5rem;
 }
 
-/* --- THIS IS THE 3-COLUMN MATRIX --- */
 .itemGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr); 
   gap: 1.5rem;
+}
+
+/* --- Floating "Finish Editing" Button --- */
+.finishEditingButton {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  padding: 0.8rem 1.5rem;
+  background-color: #2ecc71; /* Green */
+  color: white;
+  text-decoration: none;
+  border: none;
+  border-radius: 50px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+.finishEditingButton:hover {
+  background-color: #27ae60; /* Darker green */
+  transform: scale(1.05);
 }
 
 
@@ -80,72 +115,47 @@
 }
 
 @media (max-width: 768px) {
+  /* Stack the 2-column layout vertically */
   .menuLayout {
     grid-template-columns: 1fr; 
   }
 
+  /* --- THIS IS THE FIX for the category list --- */
+  .categoryNav {
+    /* Ensure the nav container itself doesn't overflow */
+    width: 100%;
+    overflow: hidden;
+  }
   .categoryNav ul {
     position: static;
     display: flex;
-    overflow-x: auto;
-    padding-bottom: 1rem;
+    overflow-x: auto; /* **Allow horizontal scroll *for the list only*** */
+    padding-bottom: 1rem; /* Space for scrollbar */
     margin-bottom: 2rem;
+    /* Add properties to prevent wrapping and show scrollbar */
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch; /* Smooth scroll on iOS */
   }
-
   .categoryNav li {
     flex-shrink: 0;
   }
-
   .categoryNav button {
-    width: auto;
-    white-space: nowrap;
+    width: auto; /* Let buttons size to content */
+    white-space: nowrap; /* Prevent text wrapping */
     margin-right: 0.5rem;
+    
+    /* --- MAKE TEXT SMALLER --- */
+    font-size: 0.85rem;
+    padding: 0.8rem 1rem;
+    /* --- END SMALLER TEXT --- */
   }
+  /* --- END FIX --- */
   
+  
+  /* --- THIS IS THE FIX for the 2-column item grid --- */
   .itemGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr); /* 2 columns on mobile */
+    gap: 1rem; /* Smaller gap for mobile */
   }
-}
-/* ADD THESE RULES to app/menu/MenuPage.module.css */
-
-/* ... (Keep existing styles for .editHeader, .doneEditingButton, etc.) ... */
-/* MODIFY THIS RULE */
-.editHeader {
-  /* display: flex; */ /* Remove flex */
-  /* justify-content: space-between; */ /* Remove */
-  /* align-items: center; */ /* Remove */
-  text-align: center; /* Center the title */
-  margin-bottom: 2rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #eee;
-}
-
-.editHeader h1 {
-  font-size: 2rem;
-  color: var(--primary-color);
-  margin: 0;
-}
-/* REPLACE .viewUpdatedOrderButton with this */
-
-.finishEditingButton { /* Renamed */
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  padding: 0.8rem 1.5rem;
-  background-color: #2ecc71; /* Green */
-  color: white;
-  text-decoration: none;
-  border: none; /* Ensure no border */
-  border-radius: 50px; /* Pill shape */
-  font-weight: bold;
-  font-size: 0.9rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  cursor: pointer; /* Add cursor */
-  transition: background-color 0.2s, transform 0.2s;
-}
-
-.finishEditingButton:hover {
-  background-color: #27ae60; /* Darker green */
-  transform: scale(1.05);
+  /* --- END FIX --- */
 }
