@@ -18,7 +18,7 @@ const CountUpStats = () => {
       <div className={styles.statItem}>
         <h2>
           {/* Only start the animation if 'inView' is true */}
-          {inView && <CountUp end={25} duration={2.5} />} +
+          {inView && <CountUp end={20} duration={2.5} />} +
         </h2>
         <p>Years of Excellence</p>
       </div>
@@ -30,7 +30,7 @@ const CountUpStats = () => {
       </div>
       <div className={styles.statItem}>
         <h2>
-          {inView && <CountUp end={1500} duration={2.5} />} +
+          {inView && <CountUp end={1000} duration={2.5} />} +
         </h2>
         <p>Clients Served</p>
       </div>

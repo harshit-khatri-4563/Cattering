@@ -13,7 +13,7 @@ const menuData = [
   {
     mainCategory: 'Drinks',
     items: [
-      { id: 'd1', name: 'Masala Chai', description: 'Traditional spiced Indian tea.', imageUrl: 'https://placehold.co/300x200/c0392b/white?text=Drinks' },
+      { id: 'd1', name: 'D.1 Masala Chai', description: 'Traditional spiced Indian tea.', imageUrl: 'https://placehold.co/300x200/c0392b/white?text=Drinks' },
       { id: 'd2', name: 'Filter Coffee', description: 'South Indian style filter coffee.', imageUrl: 'https://placehold.co/300x200/c0392b/white?text=Drinks' },
       { id: 'd3', name: 'Ginger Tea', description: 'Refreshing tea with ginger.', imageUrl: 'https://placehold.co/300x200/c0392b/white?text=Drinks' },
       { id: 'd4', name: 'Cappuccino', description: 'Espresso with steamed milk foam.', imageUrl: 'https://placehold.co/300x200/c0392b/white?text=Drinks' },
