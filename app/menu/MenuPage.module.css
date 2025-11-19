@@ -3,18 +3,14 @@
   max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
-  /* Prevent horizontal scroll on the main page container */
   overflow-x: hidden;
 }
-
 .pageTitle {
   font-size: 3rem;
   text-align: center;
   margin-bottom: 3rem;
   color: var(--dark-background);
 }
-
-/* --- Edit Mode Header --- */
 .editHeader {
   text-align: center;
   margin-bottom: 2rem;
@@ -26,15 +22,11 @@
   color: var(--primary-color);
   margin: 0;
 }
-/* --- End Edit Mode Header --- */
-
 .menuLayout {
   display: grid;
   grid-template-columns: 280px 1fr; 
   gap: 2.5rem;
 }
-
-/* --- LEFT COLUMN: CATEGORY NAVIGATION --- */
 .categoryNav ul {
   list-style: none;
   padding: 0;
@@ -66,8 +58,6 @@
   font-weight: bold;
   border-color: var(--primary-color);
 }
-
-/* --- RIGHT COLUMN: ITEM DISPLAY --- */
 .itemDisplay h2 {
   font-size: 2.2rem;
   color: var(--dark-background);
@@ -76,14 +66,11 @@
   border-bottom: 2px solid #eee;
   padding-bottom: 0.5rem;
 }
-
 .itemGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr); 
   gap: 1.5rem;
 }
-
-/* --- Floating "Finish Editing" Button --- */
 .finishEditingButton {
   position: fixed;
   bottom: 2rem;
@@ -102,12 +89,10 @@
   transition: background-color 0.2s, transform 0.2s;
 }
 .finishEditingButton:hover {
-  background-color: #27ae60; /* Darker green */
+  background-color: #27ae60;
   transform: scale(1.05);
 }
 
-
-/* --- RESPONSIVE STYLES --- */
 @media (max-width: 1200px) {
   .itemGrid {
     grid-template-columns: repeat(2, 1fr);
@@ -120,42 +105,35 @@
     grid-template-columns: 1fr; 
   }
 
-  /* --- THIS IS THE FIX for the category list --- */
+  /* Category list fix (horizontal scroll) */
   .categoryNav {
-    /* Ensure the nav container itself doesn't overflow */
     width: 100%;
     overflow: hidden;
   }
   .categoryNav ul {
     position: static;
     display: flex;
-    overflow-x: auto; /* **Allow horizontal scroll *for the list only*** */
-    padding-bottom: 1rem; /* Space for scrollbar */
+    overflow-x: auto; /* Allow horizontal scroll for the list only */
+    padding-bottom: 1rem;
     margin-bottom: 2rem;
-    /* Add properties to prevent wrapping and show scrollbar */
     white-space: nowrap;
-    -webkit-overflow-scrolling: touch; /* Smooth scroll on iOS */
+    -webkit-overflow-scrolling: touch;
   }
   .categoryNav li {
     flex-shrink: 0;
   }
   .categoryNav button {
-    width: auto; /* Let buttons size to content */
-    white-space: nowrap; /* Prevent text wrapping */
+    width: auto;
+    white-space: nowrap;
     margin-right: 0.5rem;
-    
-    /* --- MAKE TEXT SMALLER --- */
     font-size: 0.85rem;
     padding: 0.8rem 1rem;
-    /* --- END SMALLER TEXT --- */
   }
-  /* --- END FIX --- */
   
-  
-  /* --- THIS IS THE FIX for the 2-column item grid --- */
+  /* --- FIX: Set Item Grid to 1 Column --- */
   .itemGrid {
-    grid-template-columns: repeat(2, 1fr); /* 2 columns on mobile */
-    gap: 1rem; /* Smaller gap for mobile */
+    grid-template-columns: 1fr; /* **1 column on mobile** (Stack vertically) */
+    gap: 1.5rem; /* Add vertical gap */
   }
   /* --- END FIX --- */
 }
