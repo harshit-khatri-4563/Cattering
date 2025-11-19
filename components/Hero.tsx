@@ -1,12 +1,13 @@
 // components/Hero.tsx
 import Image from 'next/image';
 import styles from './Hero.module.css';
+import bannerImage from './photo/banner.jpg';
 
 const Hero = () => {
   return (
     <div className={styles.hero}>
       <Image
-        src="https://placehold.co/1920x1080/c0392b/white?text=Gourmet+Catering" 
+        src={bannerImage} 
         alt="Catering food display"
         fill // <-- FIXED (replaces layout="fill")
         style={{ objectFit: "cover" }} // <-- FIXED (replaces objectFit="cover")

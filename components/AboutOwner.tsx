@@ -1,6 +1,7 @@
 // components/AboutOwner.tsx
 import Image from 'next/image';
 import styles from './AboutOwner.module.css';
+import ownerImage from './photo/owner.jpg';
 
 const AboutOwner = () => {
   return (
@@ -8,7 +9,7 @@ const AboutOwner = () => {
       <div className={styles.container}>
         <div className={styles.imageWrapper}>
           <Image
-            src="https://placehold.co/500x500/2C3E50/white?text=Our+Founder"
+            src={ownerImage}
             alt="Owner of Gourmet Catering"
             width={500}
             height={500}
@@ -18,9 +19,9 @@ const AboutOwner = () => {
         </div>
         <div className={styles.textWrapper}>
           <h2>Meet the Founder</h2>
-          <h3>[Owner's Name]</h3>
+          <h3>Mahesh Modi</h3>
           <p>
-            With over two decades of culinary experience, [Owner's Name] founded 
+            With over two decades of culinary experience, Mahesh Modi founded 
             Gourmet Catering with a simple vision: to bring people together 
             over exceptional food. 
           </p>

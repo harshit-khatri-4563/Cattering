@@ -25,9 +25,9 @@ const Footer = () => {
         </div>
         <div className={styles.section}>
           <h3>Contact Us</h3>
-          <p><strong>Name:</strong> [Your Name]</p>
-          <p><strong>Phone:</strong> [Your Phone Number]</p>
-          <p><strong>Address:</strong> [Your Full Address]</p>
+          <p><strong>Name:</strong> Mahesh Modi</p>
+          <p><strong>Phone:</strong> 9999999999</p>
+          <p><strong>Address:</strong> ABC</p>
         </div>
       </div>
       <div className={styles.copyright}>
